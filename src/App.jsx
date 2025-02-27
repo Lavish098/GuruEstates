@@ -39,12 +39,10 @@ const ProtectedRoute = ({ children, allowedRoles }) => {
 // Home route component to handle role-based rendering
 const HomeRoute = () => {
   const userString = localStorage.getItem("user");
-  if (!userString) {
-    return <Navigate to="/login" replace />;
+  if (userString) {
+    const user = JSON.parse(userString);
+    return user.role === "client" ? <ClientDashboard /> : <Index />;
   }
-
-  const user = JSON.parse(userString);
-  return user.role === "client" ? <ClientDashboard /> : <Index />;
 };
 
 const App = () => (
