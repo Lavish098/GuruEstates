@@ -8,7 +8,7 @@ import axios from "axios";
 export const PropertyContext = createContext();
 
 const PropertyContextProvider = (props) => {
-  const API_URL = import.meta.env.GURU_ESTATES_API_URL;
+  const API_URL = "https://guru-estates-backend.vercel.app/";
 
   const [formData, setFormData] = useState({
     username: "",
