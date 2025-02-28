@@ -3,12 +3,11 @@ import { createContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 // import Cookies from "js-cookie";
 import axios from "axios";
-// https://react-chat-app-main.onrender.com
 
 export const PropertyContext = createContext();
 
 const PropertyContextProvider = (props) => {
-  const API_URL = "https://guru-estates-backend.vercel.app";
+  //   const API_URL = "https://guru-estates-backend.vercel.app";
 
   const [formData, setFormData] = useState({
     username: "",
