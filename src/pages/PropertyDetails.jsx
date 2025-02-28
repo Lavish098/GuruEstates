@@ -23,7 +23,7 @@ const PropertyDetails = () => {
   useEffect(() => {
     const fetchProperty = async () => {
       try {
-        const res = await fetch(`/api/properties/${id}`);
+        const res = await fetch(`/api/${id}`);
 
         console.log(res);
         // Check if the response is OK (status code 200-299)

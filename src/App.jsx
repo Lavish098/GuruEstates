@@ -18,6 +18,7 @@ import Signup from "./pages/Signup";
 import SignupClient from "./pages/SignupClient";
 import SignupAgent from "./pages/SignupAgent";
 import MainLayout from "./layouts/MainLayout";
+import PropertyContextProvider from "./context/PropertyContext";
 
 const queryClient = new QueryClient();
 
@@ -53,58 +54,60 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<MainLayout />}>
-            <Route path="/" element={<HomeRoute />} />
-            <Route
-              path="/appointments"
-              element={
-                <ProtectedRoute allowedRoles={["agent", "admin", "client"]}>
-                  <Appointments />
-                </ProtectedRoute>
-              }
-            />
-            <Route path="/properties" element={<Properties />} />
-            <Route
-              path="/contacts"
-              element={
-                <ProtectedRoute allowedRoles={["agent", "admin"]}>
-                  <Contacts />
-                </ProtectedRoute>
-              }
-            />
-            <Route path="/property/:id" element={<PropertyDetails />} />
-            <Route
-              path="/agents"
-              element={
-                <ProtectedRoute>
-                  <AgentList />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/profile"
-              element={
-                <ProtectedRoute allowedRoles={["client", "agent"]}>
-                  <ClientProfile />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/menu"
-              element={
-                <ProtectedRoute>
-                  <Menu />
-                </ProtectedRoute>
-              }
-            />
-            <Route path="/login" element={<Login />} />
-            <Route path="/signup" element={<Signup />} />
-            <Route path="/signup/client" element={<SignupClient />} />
-            <Route path="/signup/agent" element={<SignupAgent />} />
-            <Route path="*" element={<NotFound />} />
-          </Route>
-        </Routes>
+        <PropertyContextProvider>
+          <Routes>
+            <Route path="/" element={<MainLayout />}>
+              <Route path="/" element={<HomeRoute />} />
+              <Route
+                path="/appointments"
+                element={
+                  <ProtectedRoute allowedRoles={["agent", "admin", "client"]}>
+                    <Appointments />
+                  </ProtectedRoute>
+                }
+              />
+              <Route path="/properties" element={<Properties />} />
+              <Route
+                path="/contacts"
+                element={
+                  <ProtectedRoute allowedRoles={["agent", "admin"]}>
+                    <Contacts />
+                  </ProtectedRoute>
+                }
+              />
+              <Route path="/property/:id" element={<PropertyDetails />} />
+              <Route
+                path="/agents"
+                element={
+                  <ProtectedRoute>
+                    <AgentList />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/profile"
+                element={
+                  <ProtectedRoute allowedRoles={["client", "agent"]}>
+                    <ClientProfile />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/menu"
+                element={
+                  <ProtectedRoute>
+                    <Menu />
+                  </ProtectedRoute>
+                }
+              />
+              <Route path="/login" element={<Login />} />
+              <Route path="/signup" element={<Signup />} />
+              <Route path="/signup/client" element={<SignupClient />} />
+              <Route path="/signup/agent" element={<SignupAgent />} />
+              <Route path="*" element={<NotFound />} />
+            </Route>
+          </Routes>
+        </PropertyContextProvider>
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>
