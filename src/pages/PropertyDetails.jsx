@@ -12,39 +12,31 @@ import { useNavigate, useParams, Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { BottomNav } from "@/components/BottomNav";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
+import { PropertyContext } from "../context/PropertyContext";
 
 const PropertyDetails = () => {
   const navigate = useNavigate();
   const { id } = useParams();
-
-  const [property, setProperty] = useState([]);
+  const [property, setProperty] = useState({});
+  const { properties } = useContext(PropertyContext);
 
   useEffect(() => {
     const fetchProperty = async () => {
       try {
-        const res = await fetch(`/api/${id}`);
-
-        console.log(res);
-        // Check if the response is OK (status code 200-299)
-        if (!res.ok) {
-          console.log(res.status);
-
-          throw new Error(`HTTP error! status: ${res.status}`);
+        const foundProperty = properties.find((property) => property.id === id);
+        if (foundProperty) {
+          setProperty(foundProperty);
+        } else {
+          // setError("Property not found"); // Handle case where property is not found
         }
-
-        const data = await res.json();
-        console.log(data);
-        setProperty(data);
       } catch (err) {
         console.error(err);
-        setError(err.message); // Set error message to state
       } finally {
       }
     };
-
     fetchProperty();
-  }, [id]);
+  }, [id, properties]);
 
   // Mock property data (in a real app, this would come from an API)
 
