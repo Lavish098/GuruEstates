@@ -20,7 +20,7 @@ const PropertyContextProvider = (props) => {
 
   useEffect(() => {
     fetchProperties();
-  });
+  }, []);
 
   const checkIfMobile = () => {
     setIsMobile(window.innerWidth < 768); // Adjust the breakpoint as needed
@@ -49,7 +49,7 @@ const PropertyContextProvider = (props) => {
     }
   };
 
-  const fetchProperties = async () => {
+  const fetchProperties = () => {
     axios.get(`${API_URL}/api/properties`).then((response) => {
       console.log(response.data);
 

@@ -1,9 +1,9 @@
-
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Select } from "@/components/ui/options";
 import { useToast } from "@/components/ui/use-toast";
 
 const Login = () => {
@@ -12,28 +12,56 @@ const Login = () => {
   const [formData, setFormData] = useState({
     email: "",
     password: "",
+    role: "",
   });
+  const options = [
+    { value: "agent", label: "Agent" },
+    { value: "client", label: "Client" },
+  ];
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     // Mock login - in real app, this would validate against a backend
     if (formData.email && formData.password) {
       const mockUser = {
-        id: "1",
         email: formData.email,
-        role: formData.email.includes("admin") ? "admin" : 
-              formData.email.includes("agent") ? "agent" : "client"
+        password: formData.password,
       };
-      localStorage.setItem("user", JSON.stringify(mockUser));
-      toast({
-        title: "Success",
-        description: "Logged in successfully",
+
+      const loginUrl = formData.role === "agent" ? "agent/signin" : "signin";
+
+      const response = await fetch(`http://localhost:3001/${loginUrl}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(mockUser),
       });
-      navigate("/");
+
+      if (response.status === 400) {
+        const data = await response.json();
+        const errorMessages = Object.values(data).filter(Boolean).join(", ");
+      } else {
+        if (response.ok) {
+          const data = await response.json();
+          console.log(data);
+
+          localStorage.setItem(
+            "user",
+            JSON.stringify({ id: data._id, role: data.role })
+          );
+          toast({
+            title: "Success",
+            description: "Account created successfully",
+          });
+          // Cookies.set("jwt", data.token);
+          navigate("/");
+        }
+      }
     } else {
       toast({
         title: "Error",
-        description: "Please fill in all fields",
+        description: "Please fill in all required fields",
         variant: "destructive",
       });
     }
@@ -68,6 +96,17 @@ const Login = () => {
               onChange={(e) =>
                 setFormData({ ...formData, password: e.target.value })
               }
+            />
+          </div>
+          <div className="space-y-2">
+            <Select
+              id="role"
+              options={options}
+              value={formData.role} // Bind the select value to formData
+              onChange={
+                (e) => setFormData({ ...formData, role: e.target.value }) // Update the userType in formData
+              }
+              required
             />
           </div>
           <Button type="submit" className="w-full">

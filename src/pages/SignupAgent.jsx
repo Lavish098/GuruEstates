@@ -10,41 +10,64 @@ const SignupAgent = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const [formData, setFormData] = useState({
-    name: "",
+    firstname: "",
+    lastname: "",
     email: "",
     password: "",
     phone: "",
-    license: "",
     agency: "",
     experience: "",
     bio: "",
   });
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (
       formData.email &&
       formData.password &&
-      formData.name &&
-      formData.license
+      formData.firstname &&
+      formData.lastname
     ) {
       const mockUser = {
-        id: "1",
         email: formData.email,
-        name: formData.name,
+        firstname: formData.firstname,
+        lastname: formData.lastname,
+        password: formData.password,
         role: "agent",
         phone: formData.phone,
-        license: formData.license,
         agency: formData.agency,
         experience: formData.experience,
         bio: formData.bio,
       };
-      localStorage.setItem("user", JSON.stringify(mockUser));
-      toast({
-        title: "Success",
-        description: "Account created successfully",
+
+      const response = await fetch("http://localhost:3001/agent/signup", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(mockUser),
       });
-      navigate("/");
+
+      if (response.status === 400) {
+        const data = await response.json();
+        const errorMessages = Object.values(data).filter(Boolean).join(", ");
+      } else {
+        if (response.ok) {
+          const data = await response.json();
+          console.log(data);
+
+          localStorage.setItem(
+            "user",
+            JSON.stringify({ id: data._id, role: data.role })
+          );
+          toast({
+            title: "Success",
+            description: "Account created successfully",
+          });
+          // Cookies.set("jwt", data.token);
+          navigate("/");
+        }
+      }
     } else {
       toast({
         title: "Error",
@@ -67,10 +90,20 @@ const SignupAgent = () => {
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
             <Input
-              placeholder="Full Name"
-              value={formData.name}
+              placeholder="First Name"
+              value={formData.firstname}
               onChange={(e) =>
-                setFormData({ ...formData, name: e.target.value })
+                setFormData({ ...formData, firstname: e.target.value })
+              }
+              required
+            />
+          </div>
+          <div className="space-y-2">
+            <Input
+              placeholder="Last Name"
+              value={formData.lastname}
+              onChange={(e) =>
+                setFormData({ ...formData, lastname: e.target.value })
               }
               required
             />
@@ -88,7 +121,7 @@ const SignupAgent = () => {
           </div>
           <div className="space-y-2">
             <Input
-              type="tel"
+              type="number"
               placeholder="Phone Number"
               value={formData.phone}
               onChange={(e) =>
@@ -99,21 +132,12 @@ const SignupAgent = () => {
           </div>
           <div className="space-y-2">
             <Input
-              placeholder="Real Estate License Number"
-              value={formData.license}
-              onChange={(e) =>
-                setFormData({ ...formData, license: e.target.value })
-              }
-              required
-            />
-          </div>
-          <div className="space-y-2">
-            <Input
-              placeholder="Agency/Brokerage"
+              placeholder="Agency"
               value={formData.agency}
               onChange={(e) =>
                 setFormData({ ...formData, agency: e.target.value })
               }
+              required
             />
           </div>
           <div className="space-y-2">

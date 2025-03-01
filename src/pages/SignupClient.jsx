@@ -15,22 +15,50 @@ const SignupClient = () => {
     phone: "",
   });
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (formData.email && formData.password && formData.name) {
+    if (
+      formData.email &&
+      formData.password &&
+      formData.firstname &&
+      formData.lastname
+    ) {
       const mockUser = {
-        id: "1",
         email: formData.email,
-        name: formData.name,
+        firstname: formData.firstname,
+        lastname: formData.lastname,
         role: "client",
         phone: formData.phone,
+        password: formData.password,
       };
-      localStorage.setItem("user", JSON.stringify(mockUser));
-      toast({
-        title: "Success",
-        description: "Account created successfully",
+      const response = await fetch("http://localhost:3001/signup", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(mockUser),
       });
-      navigate("/");
+
+      if (response.status === 400) {
+        const data = await response.json();
+        const errorMessages = Object.values(data).filter(Boolean).join(", ");
+      } else {
+        if (response.ok) {
+          const data = await response.json();
+          console.log(data);
+
+          localStorage.setItem(
+            "user",
+            JSON.stringify({ id: data._id, role: data.role })
+          );
+          toast({
+            title: "Success",
+            description: "Logged in successfully",
+          });
+          // Cookies.set("jwt", data.token);
+          navigate("/");
+        }
+      }
     } else {
       toast({
         title: "Error",
@@ -53,10 +81,20 @@ const SignupClient = () => {
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
             <Input
-              placeholder="Full Name"
-              value={formData.name}
+              placeholder="First Name"
+              value={formData.firstname}
               onChange={(e) =>
-                setFormData({ ...formData, name: e.target.value })
+                setFormData({ ...formData, firstname: e.target.value })
+              }
+              required
+            />
+          </div>
+          <div className="space-y-2">
+            <Input
+              placeholder="Last Name"
+              value={formData.lastname}
+              onChange={(e) =>
+                setFormData({ ...formData, lastname: e.target.value })
               }
               required
             />

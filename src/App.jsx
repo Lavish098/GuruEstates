@@ -92,14 +92,7 @@ const App = () => (
                   </ProtectedRoute>
                 }
               />
-              <Route
-                path="/menu"
-                element={
-                  <ProtectedRoute>
-                    <Menu />
-                  </ProtectedRoute>
-                }
-              />
+              <Route path="/menu" element={<Menu />} />
               <Route path="/login" element={<Login />} />
               <Route path="/signup" element={<Signup />} />
               <Route path="/signup/client" element={<SignupClient />} />
