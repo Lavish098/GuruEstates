@@ -30,13 +30,16 @@ const Login = () => {
 
       const loginUrl = formData.role === "agent" ? "agent/signin" : "signin";
 
-      const response = await fetch(`http://localhost:3001/${loginUrl}`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(mockUser),
-      });
+      const response = await fetch(
+        `https://guru-estates-backend.vercel.app/${loginUrl}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(mockUser),
+        }
+      );
 
       if (response.status === 400) {
         const data = await response.json();
