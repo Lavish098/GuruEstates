@@ -44,6 +44,12 @@ const Login = () => {
       if (response.status === 400) {
         const data = await response.json();
         const errorMessages = Object.values(data).filter(Boolean).join(", ");
+        
+      toast({
+        title: "Error",
+        description: errorMessages,
+        variant: "destructive",
+      });
       } else {
         if (response.ok) {
           const data = await response.json();
