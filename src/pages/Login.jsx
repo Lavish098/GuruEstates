@@ -15,6 +15,7 @@ const Login = () => {
     role: "",
   });
   const options = [
+    { value: "", label: "Client/Agent" },
     { value: "agent", label: "Agent" },
     { value: "client", label: "Client" },
   ];
@@ -27,6 +28,8 @@ const Login = () => {
         email: formData.email,
         password: formData.password,
       };
+
+      console.log(formData.role);
 
       const loginUrl = formData.role === "agent" ? "agent/signin" : "signin";
 
@@ -43,15 +46,31 @@ const Login = () => {
 
       if (response.status === 400) {
         const data = await response.json();
-        const errorMessages = Object.values(data).filter(Boolean).join(", ");
+        console.log(data);
+
+        const errorMessages = Object.values(data)
+          .filter((msg) => typeof msg === "string" && msg.trim() !== "")
+          .join(", ");
+
+        toast({
+          title: "Error",
+          description: errorMessages,
+          variant: "destructive",
+        });
+        console.log(errorMessages);
       } else {
         if (response.ok) {
           const data = await response.json();
-          console.log(data);
+          console.log(data.errors);
 
           localStorage.setItem(
             "user",
-            JSON.stringify({ id: data._id, role: data.role })
+            JSON.stringify({
+              id: data._id,
+              role: data.role,
+              firstname: data.firstname,
+              lastname: data.lastname,
+            })
           );
           toast({
             title: "Success",

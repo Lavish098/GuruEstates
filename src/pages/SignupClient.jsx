@@ -52,7 +52,12 @@ const SignupClient = () => {
 
           localStorage.setItem(
             "user",
-            JSON.stringify({ id: data._id, role: data.role })
+            JSON.stringify({
+              id: data._id,
+              role: data.role,
+              firstname: data.firstname,
+              lastname: data.lastname,
+            })
           );
           toast({
             title: "Success",

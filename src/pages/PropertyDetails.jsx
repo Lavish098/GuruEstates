@@ -20,6 +20,7 @@ const PropertyDetails = () => {
   const { id } = useParams();
   const [property, setProperty] = useState({});
   const { properties } = useContext(PropertyContext);
+  const [selectedImage, setSelectedImage] = useState(null);
 
   useEffect(() => {
     const fetchProperty = async () => {
@@ -36,9 +37,16 @@ const PropertyDetails = () => {
       }
     };
     fetchProperty();
+
+    console.log(selectedImage);
   }, [id, properties]);
 
-  // Mock property data (in a real app, this would come from an API)
+  useEffect(() => {
+    // Set selectedImage when property.images is available
+    if (property.images && property.images.length > 0) {
+      setSelectedImage(property.images[0]);
+    }
+  }, [property]);
 
   return (
     <div className="min-h-screen bg-gray-50 pb-20">
@@ -52,10 +60,10 @@ const PropertyDetails = () => {
       </div>
 
       <main className="container mx-auto px-4 mt-6 space-y-6 max-w-4xl">
-        {property.images && property.images.length > 0 ? (
+        {selectedImage ? (
           <div className="rounded-lg overflow-hidden">
             <img
-              src={property.images[0]}
+              src={selectedImage}
               alt={property.title}
               className="w-full h-64 object-cover"
             />
@@ -67,9 +75,18 @@ const PropertyDetails = () => {
         )}
 
         {property.images && property.images.length > 1 && (
-          <div className="grid grid-cols-4 gap-2">
+          <div
+            className="w-full flex flex-row overflow-x-scroll snap-x snap-mandatory"
+            style={{ paddingBottom: "15px", clipPath: "inset(0 0 20px 0)" }}
+          >
             {property.images.slice(1).map((image, index) => (
-              <div key={index} className="rounded-lg overflow-hidden h-24">
+              <div
+                key={index}
+                onClick={() => setSelectedImage(image)}
+                className={`overflow-hidden w-[200px] h-[120px] flex-shrink-0 snap-start mx-1 cursor-pointer rounded-md transition-all ${
+                  selectedImage === image ? "ring-2 ring-blue-500" : ""
+                }`}
+              >
                 <img
                   src={image}
                   alt={`${property.title} ${index + 2}`}

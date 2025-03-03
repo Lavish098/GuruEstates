@@ -1,14 +1,26 @@
-import { Settings, LogOut, HelpCircle, Bell, User } from "lucide-react";
+import {
+  Settings,
+  LogOut,
+  HelpCircle,
+  Bell,
+  User,
+  Heart,
+  Plus,
+} from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { BottomNav } from "@/components/BottomNav";
 import { useNavigate, Link } from "react-router-dom";
 import { useToast } from "@/components/ui/use-toast";
 
 const MenuItem = ({ icon: Icon, label, onClick }) => (
-  <Card className="p-4" onClick={onClick} role={onClick ? "button" : undefined}>
-    <div className="flex items-center gap-4">
+  <Card
+    className="p-4 hover:bg-secondary hover:text-white group ease-in-out transition"
+    onClick={onClick}
+    role={onClick ? "button" : undefined}
+  >
+    <div className="flex items-center gap-4 ">
       <div className="p-2 bg-secondary/10 rounded-full">
-        <Icon className="w-5 h-5 text-secondary" />
+        <Icon className="w-5 h-5 text-secondary group-hover:text-white" />
       </div>
       <span className="font-medium">{label}</span>
     </div>
@@ -45,16 +57,25 @@ const Menu = () => {
             </div>
           )}{" "}
           <div>
-            <h2 className="font-semibold">{user.email}</h2>
-            <p className="text-sm text-muted-foreground capitalize">
-              {user.role}
-            </p>
+            <h2 className="font-semibold">
+              {user.firstname} {user.lastname}
+            </h2>
+            <h2 className="font-semibold">{user.role}</h2>
           </div>
         </div>
 
         <div className="space-y-2">
-          <MenuItem icon={Bell} label="Notifications" />
-          <MenuItem icon={Settings} label="Settings" />
+          {user.role === "agent" ? (
+            <MenuItem
+              icon={Plus}
+              label="Add your apartment"
+              onClick={() => navigate(`/add-property`)}
+            />
+          ) : (
+            ""
+          )}
+          <MenuItem icon={User} label="My Profile" />
+          <MenuItem icon={Heart} label="Saved Properties" />
           <MenuItem icon={HelpCircle} label="Help & Support" />
           {user.id ? (
             <MenuItem icon={LogOut} label="Log Out" onClick={handleLogout} />

@@ -19,6 +19,7 @@ import SignupClient from "./pages/SignupClient";
 import SignupAgent from "./pages/SignupAgent";
 import MainLayout from "./layouts/MainLayout";
 import PropertyContextProvider from "./context/PropertyContext";
+import AddProperty from "./pages/AddProperty";
 
 const queryClient = new QueryClient();
 
@@ -63,6 +64,14 @@ const App = () => (
                 element={
                   <ProtectedRoute allowedRoles={["agent", "admin", "client"]}>
                     <Appointments />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/add-property"
+                element={
+                  <ProtectedRoute allowedRoles={["agent", "admin"]}>
+                    <AddProperty />
                   </ProtectedRoute>
                 }
               />
