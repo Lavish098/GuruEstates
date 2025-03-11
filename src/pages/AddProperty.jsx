@@ -128,16 +128,16 @@ const AddProperty = () => {
         const data = await response.json();
 
         // Clear the form after submission
-        // setPropertyData({
-        //   title: "",
-        //   address: "",
-        //   price: "",
-        //   bedrooms: "",
-        //   bathrooms: "",
-        //   squareFeet: "",
-        //   propertyType: "",
-        //   description: "",
-        // });
+        setPropertyData({
+          title: "",
+          address: "",
+          price: "",
+          bedrooms: "",
+          bathrooms: "",
+          squareFeet: "",
+          propertyType: "",
+          description: "",
+        });
 
         // Clear images
         previewImages.forEach((img) => URL.revokeObjectURL(img.url));

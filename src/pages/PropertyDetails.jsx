@@ -14,6 +14,7 @@ import { Card } from "@/components/ui/card";
 import { BottomNav } from "@/components/BottomNav";
 import { useContext, useEffect, useState } from "react";
 import { PropertyContext } from "../context/PropertyContext";
+import axios from "axios";
 
 const PropertyDetails = () => {
   const navigate = useNavigate();
@@ -21,11 +22,19 @@ const PropertyDetails = () => {
   const [property, setProperty] = useState({});
   const { properties } = useContext(PropertyContext);
   const [selectedImage, setSelectedImage] = useState(null);
+  const [Number, setNumber] = useState(false);
+  const [agentNumber, setAgentNumber] = useState(null);
 
   useEffect(() => {
     const fetchProperty = async () => {
       try {
-        const foundProperty = properties.find((property) => property.id === id);
+        console.log(properties);
+
+        const foundProperty = properties.find(
+          (property) => property._id === id
+        );
+
+        console.log(foundProperty);
         if (foundProperty) {
           setProperty(foundProperty);
         } else {
@@ -41,6 +50,17 @@ const PropertyDetails = () => {
     console.log(selectedImage);
   }, [id, properties]);
 
+  const showNumber = () => {
+    console.log("click");
+
+    axios
+      .get(`http://localhost:3001/agent/property-agent/${property.agentId}`)
+      .then((response) => {
+        console.log(response.data);
+        setAgentNumber(response.data.phone);
+        setNumber(true);
+      });
+  };
   useEffect(() => {
     // Set selectedImage when property.images is available
     if (property.images && property.images.length > 0) {
@@ -63,7 +83,7 @@ const PropertyDetails = () => {
         {selectedImage ? (
           <div className="rounded-lg overflow-hidden">
             <img
-              src={selectedImage}
+              src={`data:image/jpeg;base64,${selectedImage}`}
               alt={property.title}
               className="w-full h-64 object-cover"
             />
@@ -79,7 +99,7 @@ const PropertyDetails = () => {
             className="w-full flex flex-row overflow-x-scroll snap-x snap-mandatory"
             style={{ paddingBottom: "15px", clipPath: "inset(0 0 20px 0)" }}
           >
-            {property.images.slice(1).map((image, index) => (
+            {property.images.slice(0).map((image, index) => (
               <div
                 key={index}
                 onClick={() => setSelectedImage(image)}
@@ -88,7 +108,7 @@ const PropertyDetails = () => {
                 }`}
               >
                 <img
-                  src={image}
+                  src={`data:image/jpeg;base64,${image}`}
                   alt={`${property.title} ${index + 2}`}
                   className="w-full h-full object-cover"
                 />
@@ -131,9 +151,15 @@ const PropertyDetails = () => {
           <Card className="p-6">
             <h2 className="text-lg font-semibold mb-4">Schedule a Viewing</h2>
             <div className="flex gap-4">
-              <Button className="flex-1">
-                <Phone className="mr-2 h-4 w-4" />
-                Call Agent
+              <Button className="flex-1" onClick={() => showNumber()}>
+                {Number ? (
+                  <div>{agentNumber}</div>
+                ) : (
+                  <div>
+                    <Phone className="mr-2 h-4 w-4" />
+                    Call Agent
+                  </div>
+                )}
               </Button>
               <Button variant="outline" className="flex-1">
                 <Clock className="mr-2 h-4 w-4" />
