@@ -75,7 +75,12 @@ const Menu = () => {
             ""
           )}
           <MenuItem icon={User} label="My Profile" />
-          <MenuItem icon={Heart} label="Saved Properties" />
+          {user.role === "agent" ? (
+            <MenuItem icon={Heart} label="My Properties" />
+          ) : (
+            <MenuItem icon={Heart} label="Saved Properties" />
+          )}
+
           <MenuItem icon={HelpCircle} label="Help & Support" />
           {user.id ? (
             <MenuItem icon={LogOut} label="Log Out" onClick={handleLogout} />

@@ -7,7 +7,7 @@ import axios from "axios";
 export const PropertyContext = createContext();
 
 const PropertyContextProvider = (props) => {
-  const API_URL = "https://guru-estates-backend.vercel.app";
+  const API_URL = "http://localhost:3001";
 
   const [formData, setFormData] = useState({
     username: "",

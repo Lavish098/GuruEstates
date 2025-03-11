@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select } from "@/components/ui/options";
 import { useToast } from "@/components/ui/use-toast";
+import Spinner from "../components/Spinner";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -19,9 +20,11 @@ const Login = () => {
     { value: "agent", label: "Agent" },
     { value: "client", label: "Client" },
   ];
+  const [spinner, setSpinner] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setSpinner(true);
     // Mock login - in real app, this would validate against a backend
     if (formData.email && formData.password) {
       const mockUser = {
@@ -45,6 +48,7 @@ const Login = () => {
       );
 
       if (response.status === 400) {
+        setSpinner(false);
         const data = await response.json();
         console.log(data);
 
@@ -131,7 +135,7 @@ const Login = () => {
             />
           </div>
           <Button type="submit" className="w-full">
-            Sign in
+            {spinner ? <Spinner /> : "Sign in"}
           </Button>
         </form>
 
