@@ -114,13 +114,16 @@ const AddProperty = () => {
 
         console.log(formData);
 
-        const response = await fetch("http://localhost:3001/api/property", {
-          method: "POST",
-          // headers: {
-          //   "Content-Type": "application/json",
-          // },
-          body: formData,
-        });
+        const response = await fetch(
+          "https://guru-estates-backend.vercel.app/api/property",
+          {
+            method: "POST",
+            // headers: {
+            //   "Content-Type": "application/json",
+            // },
+            body: formData,
+          }
+        );
 
         const data = await response.json();
 
