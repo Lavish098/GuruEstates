@@ -118,6 +118,7 @@ const AddProperty = () => {
           "https://guru-estates-backend.vercel.app/api/property",
           {
             method: "POST",
+            mode: 'no-cors'
             // headers: {
             //   "Content-Type": "application/json",
             // },
