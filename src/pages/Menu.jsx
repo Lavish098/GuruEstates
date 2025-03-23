@@ -50,9 +50,9 @@ const Menu = () => {
               <User className="w-8 h-8 text-secondary" />
             </div>
           ) : (
-            <div className="cursor-pointer w-full">
+            <div className="cursor-pointer w-full font-medium font-xl">
               <Link to="/login">
-                <h1>Login</h1>
+                <h1>Login/Sign Up</h1>
               </Link>
             </div>
           )}{" "}
@@ -74,7 +74,20 @@ const Menu = () => {
           ) : (
             ""
           )}
-          <MenuItem icon={User} label="My Profile" />
+          {user.id ? (
+            <MenuItem
+              icon={User}
+              label="My Profile"
+              onClick={() => navigate(`/profile/${user.id}`)}
+            />
+          ) : (
+            <MenuItem
+              icon={User}
+              label="My Profile"
+              onClick={() => navigate(`/login`)}
+            />
+          )}
+
           {user.role === "agent" ? (
             <MenuItem icon={Heart} label="My Properties" />
           ) : (

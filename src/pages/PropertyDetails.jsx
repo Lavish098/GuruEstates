@@ -54,7 +54,9 @@ const PropertyDetails = () => {
     console.log("click");
 
     axios
-      .get(`http://localhost:3001/agent/property-agent/${property.agentId}`)
+      .get(
+        `https://guru-estates-backend.vercel.app/agent/property-agent/${property.agentId}`
+      )
       .then((response) => {
         console.log(response.data);
         setAgentNumber(response.data.phone);
@@ -83,9 +85,9 @@ const PropertyDetails = () => {
         {selectedImage ? (
           <div className="rounded-lg overflow-hidden">
             <img
-              src={`data:image/jpeg;base64,${selectedImage}`}
+              src={`${selectedImage}`}
               alt={property.title}
-              className="w-full h-64 object-cover"
+              className="w-full h-80 object-cover"
             />
           </div>
         ) : (
@@ -108,7 +110,7 @@ const PropertyDetails = () => {
                 }`}
               >
                 <img
-                  src={`data:image/jpeg;base64,${image}`}
+                  src={`${image}`}
                   alt={`${property.title} ${index + 2}`}
                   className="w-full h-full object-cover"
                 />
@@ -139,7 +141,7 @@ const PropertyDetails = () => {
             <Card className="p-4 text-center">
               <Building2 className="h-5 w-5 mx-auto mb-2" />
               <p className="text-sm text-muted-foreground">Square Feet</p>
-              <p className="font-semibold">{property.sqft}</p>
+              <p className="font-semibold">{property.squareFeet}</p>
             </Card>
           </div>
 

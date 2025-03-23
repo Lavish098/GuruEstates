@@ -92,8 +92,39 @@ const AddProperty = () => {
 
       if (userData) {
         const userObject = JSON.parse(userData);
-
         const agentId = userObject.id;
+
+        let imageUrls = []; // Array to hold image URLs
+
+        if (images && images.length > 0) {
+          const img = new FormData();
+
+          // Loop through each image file
+          for (const file of images) {
+            // Check the file type
+            if (
+              file.type === "image/png" ||
+              file.type === "image/jpg" ||
+              file.type === "image/jpeg"
+            ) {
+              img.append("file", file);
+              img.append("cloud_name", "djtu6bx4g");
+              img.append("upload_preset", "guru-estate-images");
+
+              // Upload to Cloudinary
+              const response = await fetch(
+                "https://api.cloudinary.com/v1_1/djtu6bx4g/image/upload",
+                {
+                  method: "POST",
+                  body: img,
+                }
+              );
+
+              const imgData = await response.json(); // Correctly await the JSON response
+              imageUrls.push(imgData.url); // Store the image URL
+            }
+          }
+        }
 
         const formData = new FormData();
         formData.append("title", propertyData.title);
@@ -107,9 +138,9 @@ const AddProperty = () => {
         formData.append("status", "available");
         formData.append("agentId", agentId);
 
-        // Append images (multiple files)
-        images.forEach((file) => {
-          formData.append("images", file);
+        // Append image URLs to formData
+        imageUrls.forEach((url) => {
+          formData.append("images", url); // Assuming your backend expects an array of image URLs
         });
 
         console.log(formData);
@@ -118,14 +149,13 @@ const AddProperty = () => {
           "https://guru-estates-backend.vercel.app/api/property",
           {
             method: "POST",
-            // headers: {
-            //   "Content-Type": "application/json",
-            // },
             body: formData,
           }
         );
 
         const data = await response.json();
+
+        console.log(data);
 
         // Clear the form after submission
         setPropertyData({

@@ -10,7 +10,6 @@ import PropertyDetails from "./pages/PropertyDetails";
 import Appointments from "./pages/Appointments";
 import Contacts from "./pages/Contacts";
 import AgentList from "./pages/AgentList";
-import ClientProfile from "./pages/ClientProfile";
 import Menu from "./pages/Menu";
 import NotFound from "./pages/NotFound";
 import Login from "./pages/Login";
@@ -20,6 +19,7 @@ import SignupAgent from "./pages/SignupAgent";
 import MainLayout from "./layouts/MainLayout";
 import PropertyContextProvider from "./context/PropertyContext";
 import AddProperty from "./pages/AddProperty";
+import MyProfile from "./pages/MyProfile";
 
 const queryClient = new QueryClient();
 
@@ -94,10 +94,10 @@ const App = () => (
                 }
               />
               <Route
-                path="/profile"
+                path="/profile/:id"
                 element={
                   <ProtectedRoute allowedRoles={["client", "agent"]}>
-                    <ClientProfile />
+                    <MyProfile />
                   </ProtectedRoute>
                 }
               />

@@ -22,7 +22,7 @@ const propertyCard = ({ property }) => {
       <div className="h-48 bg-muted flex items-center justify-center">
         {property.images && property.images.length ? (
           <img
-            src={`data:image/jpeg;base64,${property.images[0]}`}
+            src={`${property.images[0]}`}
             alt=""
             className="w-full h-[100%]"
           />
