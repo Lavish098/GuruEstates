@@ -12,7 +12,7 @@ const PropertiesList = ({ isHome = false }) => {
 
   return (
     <div className="min-h-screen bg-gray-50 pb-20">
-      <main className=" space-y-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-1">
+      <main className=" space-y-4 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2">
         {displayedProperties.length > 0 ? (
           displayedProperties.map((property) => (
             <PropertyCard key={property._id} property={property} />

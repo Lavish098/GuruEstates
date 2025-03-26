@@ -51,7 +51,10 @@ const propertyCard = ({ property }) => {
               <Bath className="h-5 w-5 mx-auto mb-2 ml-1" />
             </span>
             <span>•</span>
-            <span>{property.sqft} sqft</span>
+            <span className="flex">
+              {property.squareFeet}
+              <Building2 className="h-5 w-5 mx-auto mb-2 ml-1" />
+            </span>
           </div>
         </div>
         <div className="flex justify-between">

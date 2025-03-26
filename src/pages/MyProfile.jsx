@@ -1,12 +1,16 @@
 import React, { useEffect, useState } from "react";
-import { User, Mail, Phone, MapPin, Edit, Save, X } from "lucide-react";
+import { User, Mail, Phone, MapPin, Edit, Save, X, Camera } from "lucide-react";
 import axios from "axios";
+import { BottomNav } from "../components/BottomNav";
+import { Button } from "@/components/ui/button";
 
 const MyProfile = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [showToast, setShowToast] = useState(false);
   const [toastMessage, setToastMessage] = useState("");
   const [toastType, setToastType] = useState("");
+  const [selectedImage, setSelectedImage] = useState(null);
+  const [previewImage, setPreviewImage] = useState(null);
 
   // Mock user data - in a real app this would come from an API or context
   const [userData, setUserData] = useState({
@@ -45,24 +49,8 @@ const MyProfile = () => {
 
         const data = response.data;
 
-        setUserData({
-          firstname: data.firstname,
-          lastname: data.lastname,
-          agency: data.agency,
-          email: data.email,
-          phone: data.phone,
-          address: data.address,
-          bio: data.bio,
-        });
-        setFormData({
-          firstname: data.firstname,
-          lastname: data.lastname,
-          agency: data.agency,
-          email: data.email,
-          phone: data.phone,
-          address: data.address,
-          bio: data.bio,
-        });
+        setUserData(data);
+        setFormData(data);
       } catch (error) {
         console.error("Error fetching profile data:", error);
       }
@@ -79,20 +67,58 @@ const MyProfile = () => {
     });
   };
 
+  const handleImageChange = (e) => {
+    if (e.target.files && e.target.files[0]) {
+      const file = e.target.files[0];
+      setSelectedImage(file);
+
+      // Create preview URL
+      const reader = new FileReader();
+      reader.onload = () => {
+        setPreviewImage(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
   const handleEditToggle = () => {
     if (isEditing) {
       // Cancel editing, reset form
-      setFormData({ ...userData });
+      setFormData(userData);
     }
     setIsEditing(!isEditing);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    const profileUrl =
+      user.role === "agent" ? "agent/agent-profile" : "user-profile";
     // In a real app, you would send this data to your backend
-    setUserData({ ...formData });
+
     setIsEditing(false);
 
+    const response = await fetch(
+      `https://guru-estates-backend.vercel.app/${profileUrl}/${user.id}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      }
+    );
+    const data = await response.json();
+    console.log(data.firstname);
+
+    setUserData({
+      firstname: data.firstname,
+      lastname: data.lastname,
+      agency: data.agency,
+      email: data.email,
+      phone: data.phone,
+      address: data.address,
+      bio: data.bio,
+    });
     // Show success toast
     setToastMessage("Profile updated successfully!");
     setToastType("success");
@@ -105,16 +131,8 @@ const MyProfile = () => {
 
   return (
     <div className="max-w-4xl mx-auto p-4 md:p-6">
-      {showToast && (
-        <Toast
-          message={toastMessage}
-          type={toastType}
-          onClose={() => setShowToast(false)}
-        />
-      )}
-
       <div className="bg-white rounded-lg shadow-md overflow-hidden">
-        <div className="bg-gradient-to-r from-blue-500 to-indigo-600 p-6 text-white">
+        <div className="bg-gradient-to-r from-secondary to-success p-6 text-white">
           <h1 className="text-2xl font-bold">My Profile</h1>
           <p className="opacity-80">Manage your personal information</p>
         </div>
@@ -123,18 +141,71 @@ const MyProfile = () => {
           <div className="flex flex-col md:flex-row gap-8">
             {/* Profile Image */}
             <div className="flex flex-col items-center">
-              <div className="w-32 h-32 rounded-full overflow-hidden mb-4 border-4 border-gray-200">
-                <img
-                  src={userData.avatar}
-                  alt="Profile"
-                  className="w-full h-full object-cover"
-                />
+              <div className="mb-6">
+                {isEditing ? (
+                  <>
+                    <label className="block text-gray-700 mb-2">
+                      Profile Image
+                    </label>
+                    <div className="w-32 h-32 rounded-full border-2 border-gray-200 flex items-center justify-center relative">
+                      {previewImage ? (
+                        <img
+                          src={previewImage}
+                          alt="Preview"
+                          className="w-32 h-32 rounded-full object-cover"
+                        />
+                      ) : userData.avatar ? (
+                        <img
+                          src={userData.avatar}
+                          alt="Current profile"
+                          className="w-20 h-20 rounded-full object-cover"
+                        />
+                      ) : (
+                        <div className="flex items-center justify-center w-full h-full ">
+                          <User size={50} className="text-secondary mr-2" />
+                        </div>
+                      )}
+
+                      <input
+                        type="file"
+                        multiple
+                        accept="image/*"
+                        className="hidden"
+                        name="images"
+                        id="image-upload"
+                        onChange={handleImageChange}
+                      />
+                      <Button
+                        type="button"
+                        variant="outline"
+                        className="absolute bottom-0 right-0 w-8 h-8 rounded-full bg-white flex items-center justify-center shadow-md border border-gray-300"
+                        onClick={() =>
+                          document.getElementById("image-upload").click()
+                        }
+                      >
+                        <Camera className="text-secondary" size={24} />
+                      </Button>
+                    </div>
+                    <div className="text-center text-sm text-gray-500 mt-2">
+                      <p>Profile image upload will be available soon</p>
+                    </div>
+                  </>
+                ) : (
+                  <div className="w-32 h-32 rounded-full overflow-hidden border-2 border-gray-200">
+                    {userData.avatar ? (
+                      <img
+                        src={userData.avatar}
+                        alt="Profile"
+                        className="w-20 h-20 rounded-full object-cover"
+                      />
+                    ) : (
+                      <div className="w-32 h-32 rounded-full flex items-center justify-center text-white text-xl font-bold">
+                        <User size={50} className="text-secondary mr-2" />
+                      </div>
+                    )}
+                  </div>
+                )}
               </div>
-              {isEditing && (
-                <div className="text-center text-sm text-gray-500">
-                  <p>Profile image upload will be available soon</p>
-                </div>
-              )}
             </div>
 
             {/* Profile Info */}
@@ -152,7 +223,7 @@ const MyProfile = () => {
                         </span>
                         <input
                           type="text"
-                          name="name"
+                          name="firstname"
                           value={formData.firstname}
                           onChange={handleInputChange}
                           className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -177,7 +248,7 @@ const MyProfile = () => {
                         </span>
                         <input
                           type="text"
-                          name="name"
+                          name="lastname"
                           value={formData.lastname}
                           onChange={handleInputChange}
                           className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -255,7 +326,7 @@ const MyProfile = () => {
                         <input
                           type="text"
                           name="address"
-                          value={formData.address}
+                          value={formData.address || ""}
                           onChange={handleInputChange}
                           className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                         />
@@ -280,7 +351,7 @@ const MyProfile = () => {
                             </span>
                             <input
                               type="text"
-                              name="address"
+                              name="agency"
                               value={formData.agency}
                               onChange={handleInputChange}
                               className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -330,7 +401,7 @@ const MyProfile = () => {
                       </button>
                       <button
                         type="submit"
-                        className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 flex items-center"
+                        className="px-4 py-2 bg-secondary text-white rounded-md hover:bg-success flex items-center"
                       >
                         <Save size={16} className="mr-1" /> Save Changes
                       </button>
@@ -339,7 +410,7 @@ const MyProfile = () => {
                     <button
                       type="button"
                       onClick={handleEditToggle}
-                      className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 flex items-center"
+                      className="px-4 py-2 bg-secondary text-white rounded-md hover:bg-success flex items-center"
                     >
                       <Edit size={16} className="mr-1" /> Edit Profile
                     </button>
@@ -350,6 +421,7 @@ const MyProfile = () => {
           </div>
         </div>
       </div>
+      <BottomNav />
     </div>
   );
 };
