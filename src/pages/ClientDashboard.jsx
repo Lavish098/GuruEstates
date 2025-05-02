@@ -58,7 +58,7 @@ const ClientDashboard = () => {
               </Button>
             </Link>
           </div>
-          <div className="">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <PropertiesList isHome={true} />
           </div>
         </div>
