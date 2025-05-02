@@ -11,8 +11,8 @@ const PropertiesList = ({ isHome = false }) => {
   const displayedProperties = isHome ? properties.slice(0, 4) : properties;
 
   return (
-    <div className="min-h-screen bg-gray-50 pb-20">
-      <main className=" space-y-4 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2">
+    <div className="min-h-screen bg-gray-50 pb-20 py-3 mx-3">
+      <main className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
         {displayedProperties.length > 0 ? (
           displayedProperties.map((property) => (
             <PropertyCard key={property._id} property={property} />

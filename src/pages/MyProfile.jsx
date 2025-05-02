@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { User, Mail, Phone, MapPin, Edit, Save, X, Camera } from "lucide-react";
 import axios from "axios";
+import crypto from "crypto";
 import { BottomNav } from "../components/BottomNav";
 import { Button } from "@/components/ui/button";
+import SHA1 from "crypto-js/sha1";
 
 const MyProfile = () => {
   const [isEditing, setIsEditing] = useState(false);
@@ -11,6 +13,7 @@ const MyProfile = () => {
   const [toastType, setToastType] = useState("");
   const [selectedImage, setSelectedImage] = useState(null);
   const [previewImage, setPreviewImage] = useState(null);
+  const [publicId, setPublicId] = useState(""); // Store Cloudinary public ID
 
   // Mock user data - in a real app this would come from an API or context
   const [userData, setUserData] = useState({
@@ -21,7 +24,7 @@ const MyProfile = () => {
     phone: "",
     address: "",
     bio: "",
-    avatar: "",
+    profileImg: {},
   });
 
   const [formData, setFormData] = useState({
@@ -32,7 +35,7 @@ const MyProfile = () => {
     phone: "",
     address: "",
     bio: "",
-    avatar: "",
+    profileImg: {},
   });
   const user = JSON.parse(localStorage.getItem("user") || "{}");
 
@@ -40,6 +43,8 @@ const MyProfile = () => {
     const fetchProfileData = async () => {
       const profileUrl =
         user.role === "agent" ? "agent/property-agent" : "user";
+
+      // https://guru-estates-backend.vercel.app
 
       try {
         const response = await axios.get(
@@ -49,12 +54,20 @@ const MyProfile = () => {
 
         const data = response.data;
 
-        setUserData(data);
-        setFormData(data);
+        setUserData({
+          ...(data.agent || data.user),
+          profileImg: data.image || {},
+        });
+        setFormData({
+          ...(data.agent || data.user),
+          profileImg: data.image || {},
+        });
+        setPublicId(data.image.public_id);
       } catch (error) {
         console.error("Error fetching profile data:", error);
       }
     };
+    console.log(userData);
 
     fetchProfileData();
   }, [user.role, user.id]);
@@ -89,6 +102,68 @@ const MyProfile = () => {
     setIsEditing(!isEditing);
   };
 
+  // Upload new image to Cloudinary
+  const handleImageUpload = async () => {
+    if (!selectedImage) return alert("Please select an image.");
+
+    if (
+      selectedImage.type === "image/png" ||
+      selectedImage.type === "image/jpg" ||
+      selectedImage.type === "image/jpeg"
+    ) {
+      const profileImg = new FormData();
+      profileImg.append("file", selectedImage);
+      profileImg.append("cloud_name", "djtu6bx4g");
+      profileImg.append("upload_preset", "guru-estate-profile-images"); // Change this!
+
+      try {
+        // Step 1: Delete previous image from Cloudinary
+        console.log(publicId);
+
+        if (publicId) {
+          const public_id = publicId;
+
+          const deleteResponse = await axios.post(
+            `https://guru-estates-backend.vercel.app/image/delete`,
+            {
+              public_id,
+            }
+          );
+          console.log(deleteResponse);
+        }
+
+        // Step 2: Upload new image to Cloudinary
+        const uploadResponse = await axios.post(
+          "https://api.cloudinary.com/v1_1/djtu6bx4g/image/upload",
+          profileImg
+        );
+
+        console.log(uploadResponse);
+
+        const newImageUrl = uploadResponse.data.secure_url;
+        const newPublicId = uploadResponse.data.public_id;
+
+        console.log(newImageUrl, newPublicId);
+
+        setFormData({
+          ...formData,
+          profileImg: {
+            newImageUrl,
+            newPublicId,
+          },
+        });
+
+        // // Update UI
+        // setImageUrl(newImageUrl);
+        setPublicId(newPublicId);
+        alert("Image uploaded successfully!");
+      } catch (error) {
+        console.error("Upload error:", error);
+        alert("Failed to upload image.");
+      }
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     const profileUrl =
@@ -100,7 +175,7 @@ const MyProfile = () => {
     const response = await fetch(
       `https://guru-estates-backend.vercel.app/${profileUrl}/${user.id}`,
       {
-        method: "POST",
+        method: "PUT",
         headers: {
           "Content-Type": "application/json",
         },
@@ -119,6 +194,9 @@ const MyProfile = () => {
       address: data.address,
       bio: data.bio,
     });
+
+    window.location.reload();
+
     // Show success toast
     setToastMessage("Profile updated successfully!");
     setToastType("success");
@@ -154,11 +232,11 @@ const MyProfile = () => {
                           alt="Preview"
                           className="w-32 h-32 rounded-full object-cover"
                         />
-                      ) : userData.avatar ? (
+                      ) : userData.profileImg ? (
                         <img
-                          src={userData.avatar}
+                          src={userData.profileImg.url}
                           alt="Current profile"
-                          className="w-20 h-20 rounded-full object-cover"
+                          className="w-32 h-32 rounded-full object-cover"
                         />
                       ) : (
                         <div className="flex items-center justify-center w-full h-full ">
@@ -189,14 +267,22 @@ const MyProfile = () => {
                     <div className="text-center text-sm text-gray-500 mt-2">
                       <p>Profile image upload will be available soon</p>
                     </div>
+
+                    <button
+                      type="button"
+                      onClick={handleImageUpload}
+                      className="px-4 py-2 border bg-secondary text-primary-foreground rounded-md hover:bg-success flex items-center"
+                    >
+                      Upload Image
+                    </button>
                   </>
                 ) : (
                   <div className="w-32 h-32 rounded-full overflow-hidden border-2 border-gray-200">
-                    {userData.avatar ? (
+                    {userData.profileImg ? (
                       <img
-                        src={userData.avatar}
+                        src={userData.profileImg.url}
                         alt="Profile"
-                        className="w-20 h-20 rounded-full object-cover"
+                        className="w-32 h-32 rounded-full object-cover"
                       />
                     ) : (
                       <div className="w-32 h-32 rounded-full flex items-center justify-center text-white text-xl font-bold">

@@ -24,6 +24,7 @@ const PropertyDetails = () => {
   const [selectedImage, setSelectedImage] = useState(null);
   const [Number, setNumber] = useState(false);
   const [agentNumber, setAgentNumber] = useState(null);
+  const [price, setPrice] = useState(0);
 
   useEffect(() => {
     const fetchProperty = async () => {
@@ -37,6 +38,7 @@ const PropertyDetails = () => {
         console.log(foundProperty);
         if (foundProperty) {
           setProperty(foundProperty);
+          setPrice(foundProperty.price.toLocaleString());
         } else {
           // setError("Property not found"); // Handle case where property is not found
         }
@@ -125,7 +127,7 @@ const PropertyDetails = () => {
             <MapPin className="h-4 w-4 mr-2" />
             {property.address}
           </div>
-          <p className="text-3xl font-bold">${property.price}</p>
+          <p className="text-3xl font-bold">&#8358;{price}</p>
 
           <div className="grid grid-cols-3 gap-4">
             <Card className="p-4 text-center">
