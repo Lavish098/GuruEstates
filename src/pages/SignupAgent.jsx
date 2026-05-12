@@ -86,19 +86,23 @@ const SignupAgent = () => {
   };
 
   return (
-    <div className="min-h-[91.3vh] bg-gray-50 flex items-center justify-center p-4">
-      <Card className="w-full max-w-md p-6 space-y-6">
+    <div className="flex min-h-[calc(100vh-4rem)] items-center justify-center bg-background p-4">
+      <Card className="w-full max-w-2xl space-y-6 border-white/70 bg-white/90 p-6 shadow-2xl shadow-slate-900/10">
         <div className="space-y-2 text-center">
-          <h1 className="text-2xl font-semibold">Create Agent Account</h1>
+          <p className="text-sm font-semibold uppercase tracking-[0.2em] text-secondary">
+            Agent access
+          </p>
+          <h1 className="text-3xl font-bold tracking-tight text-primary">Create Agent Account</h1>
           <p className="text-sm text-muted-foreground">
             Enter your professional information to create your account
           </p>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="grid gap-4 md:grid-cols-2">
           <div className="space-y-2">
             <Input
               placeholder="First Name"
+              className="h-12 bg-white"
               value={formData.firstname}
               onChange={(e) =>
                 setFormData({ ...formData, firstname: e.target.value })
@@ -109,6 +113,7 @@ const SignupAgent = () => {
           <div className="space-y-2">
             <Input
               placeholder="Last Name"
+              className="h-12 bg-white"
               value={formData.lastname}
               onChange={(e) =>
                 setFormData({ ...formData, lastname: e.target.value })
@@ -120,6 +125,7 @@ const SignupAgent = () => {
             <Input
               type="email"
               placeholder="Email"
+              className="h-12 bg-white"
               value={formData.email}
               onChange={(e) =>
                 setFormData({ ...formData, email: e.target.value })
@@ -131,6 +137,7 @@ const SignupAgent = () => {
             <Input
               type="number"
               placeholder="Phone Number"
+              className="h-12 bg-white"
               value={formData.phone}
               onChange={(e) =>
                 setFormData({ ...formData, phone: e.target.value })
@@ -141,6 +148,7 @@ const SignupAgent = () => {
           <div className="space-y-2">
             <Input
               placeholder="Agency"
+              className="h-12 bg-white"
               value={formData.agency}
               onChange={(e) =>
                 setFormData({ ...formData, agency: e.target.value })
@@ -152,15 +160,17 @@ const SignupAgent = () => {
             <Input
               placeholder="Years of Experience"
               type="number"
+              className="h-12 bg-white"
               value={formData.experience}
               onChange={(e) =>
                 setFormData({ ...formData, experience: e.target.value })
               }
             />
           </div>
-          <div className="space-y-2">
+          <div className="space-y-2 md:col-span-2">
             <Textarea
               placeholder="Professional Bio"
+              className="min-h-28 bg-white"
               value={formData.bio}
               onChange={(e) =>
                 setFormData({ ...formData, bio: e.target.value })
@@ -171,6 +181,7 @@ const SignupAgent = () => {
             <Input
               type="password"
               placeholder="Password"
+              className="h-12 bg-white"
               value={formData.password}
               onChange={(e) =>
                 setFormData({ ...formData, password: e.target.value })
@@ -178,7 +189,7 @@ const SignupAgent = () => {
               required
             />
           </div>
-          <Button type="submit" className="w-full">
+          <Button type="submit" className="w-full md:col-span-2">
             Create agent account
           </Button>
         </form>

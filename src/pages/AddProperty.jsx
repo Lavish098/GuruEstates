@@ -192,10 +192,14 @@ const AddProperty = () => {
   };
 
   return (
-    <div className="w-full max-w-4xl mx-auto p-4">
-      <Card>
+    <div className="min-h-screen bg-background pb-28">
+    <div className="mx-auto w-full max-w-5xl p-4 py-8">
+      <Card className="border-white/70 bg-white/90 shadow-2xl shadow-slate-900/10">
         <CardHeader>
-          <CardTitle>Add New Property</CardTitle>
+          <p className="text-sm font-semibold uppercase tracking-[0.2em] text-secondary">
+            New listing
+          </p>
+          <CardTitle className="text-3xl font-bold tracking-tight text-primary">Add New Property</CardTitle>
           <CardDescription>
             Fill in the details to list a new property
           </CardDescription>
@@ -229,7 +233,7 @@ const AddProperty = () => {
                 </div>
 
                 <div>
-                  <Label htmlFor="price">Price (USD)</Label>
+                  <Label htmlFor="price">Price (NGN)</Label>
                   <Input
                     id="price"
                     name="price"
@@ -318,13 +322,13 @@ const AddProperty = () => {
 
                 <div>
                   <Label>Property Images</Label>
-                  <div className="mt-2 border-2 border-dashed border-gray-300 rounded-md p-6 text-center">
+                  <div className="mt-2 rounded-lg border-2 border-dashed border-primary/20 bg-accent/40 p-6 text-center">
                     <div className="flex flex-col items-center">
-                      <Upload className="h-12 w-12 text-gray-400 mb-3" />
-                      <p className="text-sm text-gray-500 mb-2">
+                      <Upload className="mb-3 h-12 w-12 text-primary" />
+                      <p className="mb-2 text-sm text-muted-foreground">
                         Drag and drop images here, or click to select files
                       </p>
-                      <p className="text-xs text-gray-400">
+                      <p className="text-xs text-muted-foreground">
                         (PNG, JPG, JPEG up to 5MB each)
                       </p>
                       <input
@@ -393,6 +397,7 @@ const AddProperty = () => {
           {toastMessage}
         </Toast>
       )}
+    </div>
     </div>
   );
 };

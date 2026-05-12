@@ -30,13 +30,13 @@ const appointments = [
 ];
 
 const AppointmentCard = ({ appointment }) => (
-  <Card className="p-4 space-y-3">
+  <Card className="space-y-4 border-white/70 bg-white/85 p-5 shadow-sm">
     <div className="flex justify-between items-start">
       <div className="space-y-1">
         <h3 className="font-semibold">{appointment.clientName}</h3>
         <p className="text-sm text-muted-foreground">{appointment.type.charAt(0).toUpperCase() + appointment.type.slice(1)}</p>
       </div>
-      <span className={`px-2 py-1 rounded-full text-xs ${
+      <span className={`rounded-md px-3 py-1 text-xs font-semibold ${
         appointment.status === 'scheduled' ? 'bg-secondary/10 text-secondary' :
         appointment.status === 'completed' ? 'bg-success/10 text-success' :
         'bg-destructive/10 text-destructive'
@@ -69,12 +69,17 @@ const AppointmentCard = ({ appointment }) => (
 
 const Appointments = () => {
   return (
-    <div className="min-h-screen bg-gray-50 pb-20">
-      <header className="bg-white border-b border-gray-200 px-4 py-6">
-        <h1 className="text-2xl font-semibold">Appointments</h1>
+    <div className="min-h-screen bg-background pb-28">
+      <header className="container mx-auto px-4 py-8">
+        <p className="text-sm font-semibold uppercase tracking-[0.2em] text-secondary">
+          Schedule
+        </p>
+        <h1 className="mt-2 text-3xl font-bold tracking-tight text-primary md:text-4xl">
+          Appointments
+        </h1>
       </header>
 
-      <main className="p-4 space-y-4">
+      <main className="container mx-auto grid gap-4 px-4 md:grid-cols-2">
         {appointments.map((appointment) => (
           <AppointmentCard key={appointment.id} appointment={appointment} />
         ))}

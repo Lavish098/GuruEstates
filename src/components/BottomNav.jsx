@@ -4,60 +4,35 @@ import { Link, useLocation } from "react-router-dom";
 
 export function BottomNav() {
   const location = useLocation();
-  
+
   const isActive = (path) => location.pathname === path;
-  
+  const items = [
+    { to: "/", label: "Home", icon: Home },
+    { to: "/appointments", label: "Calendar", icon: Calendar },
+    { to: "/properties", label: "Properties", icon: Building2 },
+    { to: "/contacts", label: "Contacts", icon: Users },
+    { to: "/menu", label: "More", icon: Menu },
+  ];
+
   return (
-    <nav className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 px-4 py-2 flex justify-around items-center animate-fade-in">
-      <Link
-        to="/"
-        className={`flex flex-col items-center space-y-1 ${
-          isActive("/") ? "text-secondary" : "text-gray-500"
-        }`}
-      >
-        <Home size={24} />
-        <span className="text-xs">Dashboard</span>
-      </Link>
-      
-      <Link
-        to="/appointments"
-        className={`flex flex-col items-center space-y-1 ${
-          isActive("/appointments") ? "text-secondary" : "text-gray-500"
-        }`}
-      >
-        <Calendar size={24} />
-        <span className="text-xs">Calendar</span>
-      </Link>
-      
-      <Link
-        to="/properties"
-        className={`flex flex-col items-center space-y-1 ${
-          isActive("/properties") ? "text-secondary" : "text-gray-500"
-        }`}
-      >
-        <Building2 size={24} />
-        <span className="text-xs">Properties</span>
-      </Link>
-      
-      <Link
-        to="/contacts"
-        className={`flex flex-col items-center space-y-1 ${
-          isActive("/contacts") ? "text-secondary" : "text-gray-500"
-        }`}
-      >
-        <Users size={24} />
-        <span className="text-xs">Contacts</span>
-      </Link>
-      
-      <Link
-        to="/menu"
-        className={`flex flex-col items-center space-y-1 ${
-          isActive("/menu") ? "text-secondary" : "text-gray-500"
-        }`}
-      >
-        <Menu size={24} />
-        <span className="text-xs">More</span>
-      </Link>
+    <nav className="fixed bottom-3 left-1/2 z-50 flex w-[calc(100%-1.5rem)] max-w-xl -translate-x-1/2 items-center justify-between rounded-lg border border-white/70 bg-white/90 px-2 py-2 shadow-2xl shadow-slate-900/10 backdrop-blur-xl animate-fade-in">
+      {items.map(({ to, label, icon: Icon }) => {
+        const active = isActive(to);
+        return (
+          <Link
+            key={to}
+            to={to}
+            className={`flex min-w-0 flex-1 flex-col items-center gap-1 rounded-md px-2 py-2 text-xs font-medium transition ${
+              active
+                ? "bg-primary text-primary-foreground shadow-sm"
+                : "text-muted-foreground hover:bg-accent hover:text-accent-foreground"
+            }`}
+          >
+            <Icon size={20} />
+            <span className="truncate">{label}</span>
+          </Link>
+        );
+      })}
     </nav>
   );
 }

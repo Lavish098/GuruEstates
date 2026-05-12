@@ -6,10 +6,13 @@ import { Building2, User } from "lucide-react";
 
 const Signup = () => {
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
-      <Card className="w-full max-w-md p-6 space-y-6">
+    <div className="flex min-h-[calc(100vh-4rem)] items-center justify-center bg-background p-4">
+      <Card className="w-full max-w-md space-y-6 border-white/70 bg-white/90 p-6 shadow-2xl shadow-slate-900/10">
         <div className="space-y-2 text-center">
-          <h1 className="text-2xl font-semibold">Create an account</h1>
+          <p className="text-sm font-semibold uppercase tracking-[0.2em] text-secondary">
+            Get started
+          </p>
+          <h1 className="text-3xl font-bold tracking-tight text-primary">Create an account</h1>
           <p className="text-sm text-muted-foreground">
             Choose your account type to get started
           </p>
@@ -17,9 +20,9 @@ const Signup = () => {
 
         <div className="grid gap-4">
           <Link to="/signup/client">
-            <Card className="p-4 hover:bg-gray-50 transition-colors cursor-pointer">
+            <Card className="cursor-pointer border-white/70 p-4 transition hover:-translate-y-0.5 hover:bg-accent">
               <div className="flex items-center gap-4">
-                <div className="p-2 bg-primary/10 rounded-full">
+                <div className="grid h-11 w-11 place-items-center rounded-md bg-primary/10">
                   <User className="w-6 h-6 text-primary" />
                 </div>
                 <div className="flex-1">
@@ -33,9 +36,9 @@ const Signup = () => {
           </Link>
 
           <Link to="/signup/agent">
-            <Card className="p-4 hover:bg-gray-50 transition-colors cursor-pointer">
+            <Card className="cursor-pointer border-white/70 p-4 transition hover:-translate-y-0.5 hover:bg-accent">
               <div className="flex items-center gap-4">
-                <div className="p-2 bg-primary/10 rounded-full">
+                <div className="grid h-11 w-11 place-items-center rounded-md bg-primary/10">
                   <Building2 className="w-6 h-6 text-primary" />
                 </div>
                 <div className="flex-1">

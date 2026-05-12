@@ -6,9 +6,9 @@ import {
   Bath,
   Clock,
   Phone,
-  Mail,
+  Ruler,
 } from "lucide-react";
-import { useNavigate, useParams, Link } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { BottomNav } from "@/components/BottomNav";
@@ -73,42 +73,43 @@ const PropertyDetails = () => {
   }, [property]);
 
   return (
-    <div className="min-h-screen bg-gray-50 pb-20">
-      <div className="flex items-center justify-between max-w-4xl mx-auto">
+    <div className="min-h-screen bg-background pb-28">
+      <div className="container mx-auto flex items-center justify-between px-4 py-5">
         <div className="flex items-center gap-4">
-          <Button variant="ghost" onClick={() => navigate(-1)}>
+          <Button variant="ghost" className="bg-white/70" onClick={() => navigate(-1)}>
             <ArrowLeft className="h-4 w-4 mr-2" />
             Back
           </Button>
         </div>
       </div>
 
-      <main className="container mx-auto px-4 mt-6 space-y-6 max-w-4xl">
+      <main className="container mx-auto grid gap-8 px-4 lg:grid-cols-[1.2fr_0.8fr]">
+        <section className="space-y-4">
         {selectedImage ? (
-          <div className="rounded-lg overflow-hidden">
+          <div className="overflow-hidden rounded-lg shadow-2xl shadow-slate-900/10">
             <img
               src={`${selectedImage}`}
               alt={property.title}
-              className="w-full h-80 object-cover"
+              className="h-[320px] w-full md:h-[520px]"
             />
           </div>
         ) : (
-          <div className="h-64 bg-muted rounded-lg flex items-center justify-center">
+          <div className="flex h-80 items-center justify-center rounded-lg bg-muted">
             <Building2 className="h-16 w-16 text-muted-foreground" />
           </div>
         )}
 
         {property.images && property.images.length > 1 && (
           <div
-            className="w-full flex flex-row overflow-x-scroll snap-x snap-mandatory"
+            className="flex w-full snap-x snap-mandatory flex-row gap-3 overflow-x-auto"
             style={{ paddingBottom: "15px", clipPath: "inset(0 0 20px 0)" }}
           >
             {property.images.slice(0).map((image, index) => (
               <div
                 key={index}
                 onClick={() => setSelectedImage(image)}
-                className={`overflow-hidden w-[200px] h-[120px] flex-shrink-0 snap-start mx-1 cursor-pointer rounded-md transition-all ${
-                  selectedImage === image ? "ring-2 ring-blue-500" : ""
+                className={`h-24 w-36 flex-shrink-0 cursor-pointer snap-start overflow-hidden rounded-md transition-all md:h-32 md:w-48 ${
+                  selectedImage === image ? "ring-2 ring-primary ring-offset-2" : "opacity-75 hover:opacity-100"
                 }`}
               >
                 <img
@@ -120,41 +121,47 @@ const PropertyDetails = () => {
             ))}
           </div>
         )}
+        </section>
 
-        <div className="space-y-4">
-          <h1 className="text-2xl font-semibold">{property.title}</h1>
-          <div className="flex items-center text-muted-foreground">
+        <section className="space-y-6">
+          <div className="rounded-lg border border-white/70 bg-white/85 p-6 shadow-sm">
+          <p className="mb-3 inline-flex rounded-md bg-accent px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-primary">
+            For sale
+          </p>
+          <h1 className="text-3xl font-bold tracking-tight md:text-4xl">{property.title}</h1>
+          <div className="mt-3 flex items-center text-muted-foreground">
             <MapPin className="h-4 w-4 mr-2" />
             {property.address}
           </div>
-          <p className="text-3xl font-bold">&#8358;{price}</p>
+          <p className="mt-5 text-4xl font-bold text-primary">&#8358;{price}</p>
+          </div>
 
-          <div className="grid grid-cols-3 gap-4">
-            <Card className="p-4 text-center">
-              <Bed className="h-5 w-5 mx-auto mb-2" />
+          <div className="grid grid-cols-3 gap-3">
+            <Card className="border-white/70 bg-white/85 p-4 text-center shadow-sm">
+              <Bed className="mx-auto mb-2 h-5 w-5 text-primary" />
               <p className="text-sm text-muted-foreground">Bedrooms</p>
               <p className="font-semibold">{property.bedrooms}</p>
             </Card>
-            <Card className="p-4 text-center">
-              <Bath className="h-5 w-5 mx-auto mb-2" />
+            <Card className="border-white/70 bg-white/85 p-4 text-center shadow-sm">
+              <Bath className="mx-auto mb-2 h-5 w-5 text-primary" />
               <p className="text-sm text-muted-foreground">Bathrooms</p>
               <p className="font-semibold">{property.bathrooms}</p>
             </Card>
-            <Card className="p-4 text-center">
-              <Building2 className="h-5 w-5 mx-auto mb-2" />
+            <Card className="border-white/70 bg-white/85 p-4 text-center shadow-sm">
+              <Ruler className="mx-auto mb-2 h-5 w-5 text-primary" />
               <p className="text-sm text-muted-foreground">Square Feet</p>
               <p className="font-semibold">{property.squareFeet}</p>
             </Card>
           </div>
 
-          <div className="space-y-4">
+          <Card className="space-y-4 border-white/70 bg-white/85 p-6 shadow-sm">
             <h2 className="text-xl font-semibold">Description</h2>
-            <p className="text-muted-foreground">{property.description}</p>
-          </div>
+            <p className="leading-7 text-muted-foreground">{property.description}</p>
+          </Card>
 
-          <Card className="p-6">
+          <Card className="border-white/70 bg-white/85 p-6 shadow-sm">
             <h2 className="text-lg font-semibold mb-4">Schedule a Viewing</h2>
-            <div className="flex gap-4">
+            <div className="grid gap-3 sm:grid-cols-2">
               <Button className="flex-1" onClick={() => showNumber()}>
                 {Number ? (
                   <div>{agentNumber}</div>
@@ -171,7 +178,7 @@ const PropertyDetails = () => {
               </Button>
             </div>
           </Card>
-        </div>
+        </section>
       </main>
 
       <BottomNav />

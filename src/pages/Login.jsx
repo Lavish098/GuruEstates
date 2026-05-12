@@ -93,10 +93,13 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-[91.3vh] bg-gray-50 flex items-center justify-center p-4">
-      <Card className="w-full max-w-md p-6 space-y-6">
+    <div className="flex min-h-[calc(100vh-4rem)] items-center justify-center bg-background p-4">
+      <Card className="w-full max-w-md space-y-6 border-white/70 bg-white/90 p-6 shadow-2xl shadow-slate-900/10">
         <div className="space-y-2 text-center">
-          <h1 className="text-2xl font-semibold">Welcome back</h1>
+          <p className="text-sm font-semibold uppercase tracking-[0.2em] text-secondary">
+            Secure access
+          </p>
+          <h1 className="text-3xl font-bold tracking-tight text-primary">Welcome back</h1>
           <p className="text-sm text-muted-foreground">
             Enter your credentials to access your account
           </p>
@@ -107,6 +110,7 @@ const Login = () => {
             <Input
               type="email"
               placeholder="Email"
+              className="h-12 bg-white"
               value={formData.email}
               onChange={(e) =>
                 setFormData({ ...formData, email: e.target.value })
@@ -117,6 +121,7 @@ const Login = () => {
             <Input
               type="password"
               placeholder="Password"
+              className="h-12 bg-white"
               value={formData.password}
               onChange={(e) =>
                 setFormData({ ...formData, password: e.target.value })

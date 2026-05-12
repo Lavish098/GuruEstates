@@ -24,11 +24,11 @@ const contacts = [
 ];
 
 const ContactCard = ({ contact }) => (
-  <Card className="p-4 space-y-3">
+  <Card className="space-y-4 border-white/70 bg-white/85 p-5 shadow-sm">
     <div className="flex justify-between items-start">
       <div className="space-y-1">
         <h3 className="font-semibold">{contact.name}</h3>
-        <span className="px-2 py-1 rounded-full text-xs bg-secondary/10 text-secondary">
+        <span className="inline-flex rounded-md bg-secondary/10 px-3 py-1 text-xs font-semibold text-secondary">
           {contact.type.charAt(0).toUpperCase() + contact.type.slice(1)}
         </span>
       </div>
@@ -59,17 +59,24 @@ const ContactCard = ({ contact }) => (
 
 const Contacts = () => {
   return (
-    <div className="min-h-screen bg-gray-50 pb-20">
-      <header className="bg-white border-b border-gray-200 px-4 py-6">
-        <div className="flex justify-between items-center">
-          <h1 className="text-2xl font-semibold">Contacts</h1>
-          <button className="p-2 bg-secondary text-white rounded-full">
+    <div className="min-h-screen bg-background pb-28">
+      <header className="container mx-auto px-4 py-8">
+        <div className="flex items-end justify-between gap-4">
+          <div>
+            <p className="text-sm font-semibold uppercase tracking-[0.2em] text-secondary">
+              Network
+            </p>
+            <h1 className="mt-2 text-3xl font-bold tracking-tight text-primary md:text-4xl">
+              Contacts
+            </h1>
+          </div>
+          <button className="grid h-11 w-11 place-items-center rounded-md bg-primary text-primary-foreground shadow-sm">
             <Plus className="w-5 h-5" />
           </button>
         </div>
       </header>
 
-      <main className="p-4 space-y-4">
+      <main className="container mx-auto grid gap-4 px-4 md:grid-cols-2">
         {contacts.map((contact) => (
           <ContactCard key={contact.id} contact={contact} />
         ))}

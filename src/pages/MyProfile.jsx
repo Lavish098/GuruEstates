@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { User, Mail, Phone, MapPin, Edit, Save, X, Camera } from "lucide-react";
 import axios from "axios";
-import crypto from "crypto";
 import { BottomNav } from "../components/BottomNav";
 import { Button } from "@/components/ui/button";
-import SHA1 from "crypto-js/sha1";
 
 const MyProfile = () => {
   const [isEditing, setIsEditing] = useState(false);

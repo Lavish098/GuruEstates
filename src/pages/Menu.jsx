@@ -14,13 +14,13 @@ import { useToast } from "@/components/ui/use-toast";
 
 const MenuItem = ({ icon: Icon, label, onClick }) => (
   <Card
-    className="p-4 hover:bg-secondary hover:text-white group ease-in-out transition"
+    className="group cursor-pointer border-white/70 bg-white/85 p-4 shadow-sm transition hover:-translate-y-0.5 hover:bg-primary hover:text-primary-foreground"
     onClick={onClick}
     role={onClick ? "button" : undefined}
   >
     <div className="flex items-center gap-4 ">
-      <div className="p-2 bg-secondary/10 rounded-full">
-        <Icon className="w-5 h-5 text-secondary group-hover:text-white" />
+      <div className="grid h-10 w-10 place-items-center rounded-md bg-accent">
+        <Icon className="w-5 h-5 text-primary group-hover:text-primary" />
       </div>
       <span className="font-medium">{label}</span>
     </div>
@@ -42,25 +42,25 @@ const Menu = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 pb-20">
-      <main className="p-4 space-y-4">
-        <div className="bg-white rounded-lg p-4 flex items-center gap-4 mb-6">
+    <div className="min-h-screen bg-background pb-28">
+      <main className="container mx-auto max-w-3xl space-y-4 px-4 py-8">
+        <div className="mb-6 flex items-center gap-4 rounded-lg border border-white/70 bg-white/85 p-5 shadow-sm">
           {user.id ? (
-            <div className="w-16 h-16 bg-secondary/10 rounded-full flex items-center justify-center">
-              <User className="w-8 h-8 text-secondary" />
+            <div className="flex h-16 w-16 items-center justify-center rounded-md bg-accent">
+              <User className="w-8 h-8 text-primary" />
             </div>
           ) : (
-            <div className="cursor-pointer w-full font-medium font-xl">
+            <div className="w-full cursor-pointer text-lg font-semibold">
               <Link to="/login">
                 <h1>Login/Sign Up</h1>
               </Link>
             </div>
           )}{" "}
           <div>
-            <h2 className="font-semibold">
+            <h2 className="text-lg font-semibold">
               {user.firstname} {user.lastname}
             </h2>
-            <h2 className="font-semibold">{user.role}</h2>
+            <h2 className="text-sm capitalize text-muted-foreground">{user.role}</h2>
           </div>
         </div>
 

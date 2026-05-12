@@ -33,15 +33,20 @@ const AgentList = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50 pb-20">
-      <header className="bg-white border-b border-gray-200 px-4 py-4">
-        <div className="flex items-center justify-between max-w-4xl mx-auto">
+    <div className="min-h-screen bg-background pb-28">
+      <header className="container mx-auto px-4 py-6">
+        <div className="flex items-center justify-between">
           <div className="flex items-center gap-4">
-            <Button variant="ghost" onClick={() => navigate(-1)}>
+            <Button variant="ghost" className="bg-white/70" onClick={() => navigate(-1)}>
               <ArrowLeft className="h-4 w-4 mr-2" />
               Back
             </Button>
-            <h1 className="text-2xl font-semibold">Our Agents</h1>
+            <div>
+              <p className="text-sm font-semibold uppercase tracking-[0.2em] text-secondary">
+                Experts
+              </p>
+              <h1 className="text-3xl font-bold tracking-tight text-primary">Our Agents</h1>
+            </div>
           </div>
           <div className="flex items-center gap-2">
             <Link to="/profile">
@@ -54,12 +59,12 @@ const AgentList = () => {
         </div>
       </header>
 
-      <main className="container mx-auto px-4 py-6 space-y-6 max-w-4xl">
+      <main className="container mx-auto grid max-w-5xl gap-5 px-4 py-2 md:grid-cols-2">
         {agents.map((agent) => (
-          <Card key={agent.id} className="p-6">
+          <Card key={agent.id} className="border-white/70 bg-white/85 p-6 shadow-sm">
             <div className="flex items-start gap-4">
-              <div className="w-16 h-16 bg-secondary/10 rounded-full flex items-center justify-center flex-shrink-0">
-                <User className="w-8 h-8 text-secondary" />
+              <div className="flex h-16 w-16 flex-shrink-0 items-center justify-center rounded-md bg-accent">
+                <User className="w-8 h-8 text-primary" />
               </div>
               <div className="flex-1 space-y-2">
                 <div>
@@ -77,8 +82,8 @@ const AgentList = () => {
                   </span>
                 </div>
                 <p className="text-sm">{agent.bio}</p>
-                <div className="flex gap-2 mt-4">
-                  <Button variant="secondary" className="flex items-center">
+                <div className="mt-4 flex gap-2">
+                  <Button className="flex items-center">
                     <Phone className="w-4 h-4 mr-2" />
                     Call
                   </Button>
